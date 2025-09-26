@@ -25,15 +25,15 @@ def get_u(A):
 
 
 def get_d(A):
-    U = []
+    D = []
     for i in range(len(A)):
-        U.append([])
+        D.append([])
         for j in range(len(A[i])):
             if i == j:
-                U[i].append(A[i][j])
+                D[i].append(A[i][j])
             else:
-                U[i].append(0)
-    return U
+                D[i].append(0)
+    return D
 
 
 def invert(M):

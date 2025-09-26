@@ -1,26 +1,29 @@
-def get_start_vector(A, b):
-    x = []
-    for a_s in range(len(A)):
-        a_i = b[a_s] / A[a_s][a_s]
-        x.append(a_i)
+import numpy as np
 
-    return x
+
+def d_inv(A):
+    D = []
+    for i in range(len(A)):
+        D.append([])
+        for j in range(len(A[i])):
+            if i == j:
+                D[i].append(1/A[i][j])
+            else:
+                D[i].append(0)
+    return D
 
 def solve(A, b, tol=1e-3, max_iter=1000):
-    x_alt = [1 for _ in range(len(A))]
+    x = [1 for _ in range(len(A))]
+    D_inv = np.array(d_inv(A))
 
     for iteration in range(max_iter):
-        x = list(b)
-        for i in range(len(A)):
-            for j in range(len(A)):
-                if j != i:
-                    x[i] = x[i] - A[i][j] * x_alt[j]
-            x[i] = x[i]/A[i][i]
 
-        diff = max(abs(x[i] - x_alt[i]) for i in range(len(A)))
+        x_k_1 = np.add(x, np.matmul(-D_inv, np.add(np.matmul(A, x), -np.array(b))))
+
+        diff = max(abs(x_k_1[i] - x[i]) for i in range(len(A)))
         if diff < tol:
             return x, iteration + 1
 
-        x_alt = x
+        x = x_k_1
 
-    return x_alt, max_iter
+    return x, max_iter
