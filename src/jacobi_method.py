@@ -8,10 +8,8 @@ def get_start_vector(A, b):
 
 def solve(A, b, tol=1e-3, max_iter=1000):
     x_alt = [1 for _ in range(len(A))]
-    iterations = 0
 
-    for m in range(max_iter):
-        iterations += 1
+    for iteration in range(max_iter):
         x = list(b)
         for i in range(len(A)):
             for j in range(len(A)):
@@ -21,8 +19,8 @@ def solve(A, b, tol=1e-3, max_iter=1000):
 
         diff = max(abs(x[i] - x_alt[i]) for i in range(len(A)))
         if diff < tol:
-            return x, iterations
+            return x, iteration + 1
 
         x_alt = x
 
-    return x_alt, iterations
+    return x_alt, max_iter
