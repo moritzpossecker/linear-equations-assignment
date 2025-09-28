@@ -1,3 +1,5 @@
+#import "@preview/codelst:2.0.2": sourcecode
+
 #set page(
   paper: "a4",
   margin: (x: 1.8cm, y: 2cm),
@@ -33,8 +35,16 @@
 
 #include "chapters/presentation_of_problem.typ"
 
+#include "chapters/convergence_criteria.typ"
+
 #include "chapters/jacobi.typ"
 
 #include "chapters/gauss_seidel.typ"
+
+#include "chapters/sor.typ"
+
+#include "chapters/comparison.typ"
+
+#include "chapters/possible_solution.typ"
 
 #include "appendix.typ"

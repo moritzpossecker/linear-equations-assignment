@@ -1,60 +1,31 @@
-import numpy as np
-
-def get_l(A):
-    L = []
-    for i in range(len(A)):
-        L.append([])
-        for j in range(len(A[i])):
-            if i >= j:
-                L[i].append(A[i][j])
-            else:
-                L[i].append(0)
-    return L
-
-def get_u(A):
-    U = []
-    for i in range(len(A)):
-        U.append([])
-        for j in range(len(A[i])):
-            if i < j:
-                U[i].append(A[i][j])
-            else:
-                U[i].append(0)
-    return U
-
-
-def invert(M):
-    return np.linalg.inv(M)
-
-
-def multiply(A, B):
-    return np.matmul(A, B)
-
-
-def add(A, B):
-    return np.add(A, B)
-
-
-def get_t_and_c(A, b):
-    L = get_l(A)
-    U = get_u(A)
-    L_inv = invert(L)
-    T = multiply(-L_inv, U)
-    C = multiply(L_inv, b)
-    return T, C
-
-
-def solve(A, b, tol=1e-3, max_iter=1000):
-    T, C = get_t_and_c(A, b)
-    x_k = [1 for _ in range(len(A))]
+def solve(A, b, tol=1e-3, max_iter=1000) -> (list, int, list):
+    # Ermittlung der Dimension n des Systems
+    n = len(A)
+    # Anlegen des Startvektors x mit den Werten 1 für alle x
+    x = [1 for _ in range(n)]
+    #Anlegen einer leeren Liste zur Sammlung der Abweichungen (für die Darstellung
+    errors = []
 
     for iteration in range(max_iter):
-        x_k_1 = add(multiply(T, x_k), C)
+        # Anlegen eines neuen leeren Lösungsvektors für diese Iteration
+        x_it = []
+        # Übersetzung der mathematischen Formel zur Berechnung von x_j
+        for j in range(n):
+            sum_k = 0
+            for k in range(n):
+                if k < j:
+                    sum_k += A[j][k] * x_it[k]
+                if k > j:
+                    sum_k += A[j][k] * x[k]
+            x_j = 1/A[j][j] * (b[j] - sum_k)
+            x_it.insert(j, x_j)
 
-        diff = max(abs(x_k_1[i] - x_k[i]) for i in range(len(A)))
+        # Überprüfung der Abbruchbedingung mithilfe der größten Differenz zur letzten Iteration
+        diff = max(abs(x_it[j] - x[j]) for j in range(n))
+        errors.append(diff)
         if diff < tol:
-            return x_k_1, iteration + 1
+            return x_it, iteration + 1, errors
 
-        x_k = x_k_1
+        x = x_it
 
-    return x_k, max_iter
+    return x, max_iter, errors

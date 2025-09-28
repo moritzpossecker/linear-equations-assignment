@@ -1,12 +1,21 @@
 = Gauß-Seidel-Verfahren
 
-Das Gauß-Seidel-Verfahren teilt die Matrix $A$ in $A = U + O$, wobei $U$ die untere Dreiecksmatrix und $O$ die strikte obere Dreiecksmatrix symbolisiert.
+Das Gauß-Seidel-Verfahren wird auch als Einzelschritt-Schritt-Verfahren bezeichnet, weil es ausnutzt, dass zum Zeitpunkt der Berechnung von $x_j^t$, die Komponenten $x_r^t ", mit " r < j$ für diese Iteration bereits bekannt sind. Für die Berechnung von $x_2^t$ wird also ausgenutzt, dass $x_1^t$ bereits bekannt ist. Es werden also nur die nötigen noch nicht errechneten Werte des letzten Iterationsschritts verwendet. Dadurch soll eine schnellere Konvergenz erreicht werden.
 
-$ A = mat(10, -1, 2, 0;
--1, 11, -1, 3; 2, -1, 10, -1; 0, 3, -1, 8) = mat(10, 0, 0, 0; -1, 11, 0, 0; 2, -1, 10, 0; 0, 3, -1, 8) + mat(0, -1, 2, 0; 0, 0, -1, 3; 0, 0, 0, -1; 0, 0, 0, 0) $
+Es ergibt sich folgende Iterationsvorschrift:
 
-Mit den gleichen Bedingungen, wie beim Jaobi-Vefahren ist die Matrix $U$ invertierbar. Der Startvektor kann auch wieder, wie beim Jacobi-Verfahren, beliebig gewählt werden.
 
-Daraus ergibt sich folgende rekursive Vorschrift:
+$ x_j^t = frac(1, a_(j j)) (
+  b_j
+  - underbrace(sum_(k < j)^(n) a_(j k) x_k^(t), "1")
+  - underbrace(sum_(k > j)^(n) a_(j k) x_k^(t-1), "2")
+) $
 
-$ x_(k+1) = U^(-1)(b-O x_k) "für alle " k in NN_0 $ @jacobi_leipzig
+- 1: Bereits bekannte Werte aus diesem Iterationsschritt  
+- 2: Noch nicht bekannte Werte $->$ Verwendung der letzten Iteration
+
+@perlt
+
+Das Gauß-Seidel Verfahren liefert bereits nach 5 Iterationen das Ergebnis
+
+$ x^5 = mat(1.0001; 2.0000; -1.0000; 1.0000) . $
